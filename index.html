@@ -1,481 +1,108 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="zh">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>汽车配件智能查询系统</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        
-        body {
-            font-family: 'Segoe UI', 'Microsoft YaHei', system-ui, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            padding: 20px;
-            color: #333;
-        }
-        
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            background: rgba(255, 255, 255, 0.95);
-            border-radius: 20px;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.1);
-            overflow: hidden;
-            backdrop-filter: blur(10px);
-        }
-        
-        .header {
-            background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
-            color: white;
-            padding: 30px;
-            text-align: center;
-        }
-        
-        .header h1 {
-            font-size: 2.5em;
-            margin-bottom: 10px;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
-        }
-        
-        .header p {
-            font-size: 1.2em;
-            opacity: 0.9;
-        }
-        
-        .search-section {
-            padding: 40px;
-            background: white;
-        }
-        
-        .brand-selector {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-            gap: 15px;
-            margin-bottom: 30px;
-        }
-        
-        .brand-btn {
-            padding: 15px;
-            border: 3px solid #e9ecef;
-            background: white;
-            border-radius: 12px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            text-align: center;
-            font-weight: 600;
-            font-size: 14px;
-        }
-        
-        .brand-btn:hover,
-        .brand-btn.active {
-            border-color: #667eea;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
-        }
-        
-        .search-box {
-            display: flex;
-            gap: 15px;
-            margin-bottom: 25px;
-        }
-        
-        .search-input {
-            flex: 1;
-            padding: 18px 25px;
-            border: 3px solid #e9ecef;
-            border-radius: 15px;
-            font-size: 16px;
-            transition: all 0.3s ease;
-        }
-        
-        .search-input:focus {
-            outline: none;
-            border-color: #667eea;
-            box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
-        }
-        
-        .search-btn {
-            padding: 18px 30px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            border: none;
-            border-radius: 15px;
-            font-size: 16px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-        
-        .search-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
-        }
-        
-        .quick-examples {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-            margin-top: 20px;
-        }
-        
-        .example-chip {
-            padding: 8px 15px;
-            background: #f8f9fa;
-            border-radius: 20px;
-            font-size: 13px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            border: 2px solid transparent;
-        }
-        
-        .example-chip:hover {
-            background: #667eea;
-            color: white;
-            border-color: #667eea;
-        }
-        
-        .results-section {
-            display: none;
-            padding: 40px;
-            background: white;
-            border-top: 1px solid #e9ecef;
-        }
-        
-        .part-card {
-            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
-            border-radius: 20px;
-            padding: 30px;
-            margin-bottom: 25px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
-        }
-        
-        .part-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 25px;
-            flex-wrap: wrap;
-            gap: 15px;
-        }
-        
-        .part-title {
-            font-size: 24px;
-            font-weight: 700;
-            color: #2c3e50;
-        }
-        
-        .part-number {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 8px 16px;
-            border-radius: 20px;
-            font-size: 14px;
-            font-weight: 600;
-        }
-        
-        .part-images {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 20px;
-            margin-bottom: 25px;
-        }
-        
-        .main-image {
-            width: 100%;
-            height: 250px;
-            object-fit: contain;
-            background: white;
-            border-radius: 15px;
-            padding: 20px;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
-        }
-        
-        .image-gallery {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
-        
-        .gallery-image {
-            width: 100%;
-            height: 75px;
-            object-fit: cover;
-            border-radius: 8px;
-            cursor: pointer;
-            border: 3px solid transparent;
-            transition: all 0.3s ease;
-        }
-        
-        .gallery-image:hover,
-        .gallery-image.active {
-            border-color: #667eea;
-        }
-        
-        .price-section {
-            background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%);
-            padding: 25px;
-            border-radius: 15px;
-            margin: 25px 0;
-        }
-        
-        .price-title {
-            font-size: 20px;
-            font-weight: 600;
-            color: #2c3e50;
-            margin-bottom: 20px;
-        }
-        
-        .supplier-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 15px;
-        }
-        
-        .supplier-card {
-            background: white;
-            padding: 20px;
-            border-radius: 12px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
-            transition: all 0.3s ease;
-        }
-        
-        .supplier-card:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 25px rgba(0,0,0,0.12);
-        }
-        
-        .supplier-name {
-            font-size: 16px;
-            font-weight: 600;
-            color: #2c3e50;
-            margin-bottom: 8px;
-        }
-        
-        .price-value {
-            font-size: 22px;
-            font-weight: bold;
-            color: #e74c3c;
-            margin-bottom: 5px;
-        }
-        
-        .stock-status {
-            font-size: 14px;
-            color: #27ae60;
-            font-weight: 500;
-        }
-        
-        .compatibility-section {
-            margin: 25px 0;
-        }
-        
-        .compatibility-title {
-            font-size: 18px;
-            font-weight: 600;
-            color: #2c3e50;
-            margin-bottom: 15px;
-        }
-        
-        .compatibility-list {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-        }
-        
-        .compatibility-item {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 8px 16px;
-            border-radius: 20px;
-            font-size: 14px;
-            font-weight: 500;
-        }
-        
-        .ai-analysis {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 25px;
-            border-radius: 15px;
-            margin-top: 25px;
-        }
-        
-        .ai-title {
-            font-size: 18px;
-            font-weight: 600;
-            margin-bottom: 15px;
-        }
-        
-        .confidence-score {
-            display: inline-block;
-            background: rgba(255,255,255,0.2);
-            padding: 10px 20px;
-            border-radius: 25px;
-            font-size: 14px;
-            font-weight: 600;
-            margin-top: 15px;
-        }
-        
-        .loading {
-            text-align: center;
-            padding: 40px;
-            display: none;
-        }
-        
-        .spinner {
-            width: 40px;
-            height: 40px;
-            border: 4px solid #f3f3f3;
-            border-top: 4px solid #667eea;
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-            margin: 0 auto 20px;
-        }
-        
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-        
-        .no-results {
-            text-align: center;
-            padding: 40px;
-            color: #6c757d;
-        }
-        
-        .no-results h3 {
-            margin-bottom: 15px;
-            color: #495057;
-        }
-        
-        .suggestion-list {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-            justify-content: center;
-            margin-top: 20px;
-        }
-        
-        @media (max-width: 768px) {
-            .search-box {
-                flex-direction: column;
-            }
-            
-            .part-images {
-                grid-template-columns: 1fr;
-            }
-            
-            .supplier-grid {
-                grid-template-columns: 1fr;
-            }
-            
-            .brand-selector {
-                grid-template-columns: repeat(2, 1fr);
-            }
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>汽车配件智能搜索</title>
+  <style>
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; margin: 0; padding: 20px; background: linear-gradient(to bottom, #f0f4f8, #d9e2ec); color: #333; }
+    .container { max-width: 900px; margin: 0 auto; background: rgba(255,255,255,0.8); backdrop-filter: blur(10px); border-radius: 16px; padding: 24px; box-shadow: 0 8px 32px rgba(0,0,0,0.1); }
+    h1 { text-align: center; color: #1a73e8; margin-bottom: 24px; }
+    #search { width: 100%; padding: 14px; font-size: 18px; border: 2px solid #ddd; border-radius: 12px; box-sizing: border-box; margin-bottom: 20px; }
+    #brand-filter { margin-bottom: 20px; text-align: center; }
+    #brand-filter button { margin: 6px; padding: 8px 16px; border-radius: 20px; border: none; background: #e0e0e0; cursor: pointer; }
+    #brand-filter button.active { background: #1a73e8; color: white; }
+    #results { display: grid; gap: 16px; }
+    .card { background: white; border-radius: 12px; padding: 16px; box-shadow: 0 4px 12px rgba(0,0,0,0.08); }
+    .oem { font-weight: bold; color: #d32f2f; font-size: 1.1em; }
+    .highlight { background: #fff3cd; padding: 2px 6px; border-radius: 4px; }
+  </style>
 </head>
 <body>
-    <div class="container">
-        <div class="header">
-            <h1>🚗 汽车配件智能查询系统</h1>
-            <p>专业 · 准确 · 高效 | 内置欧洲品牌数据库</p>
-        </div>
-        
-        <div class="search-section">
-            <div class="brand-selector">
-                <div class="brand-btn active" data-brand="all">全品牌</div>
-                <div class="brand-btn" data-brand="bmw">BMW</div>
-                <div class="brand-btn" data-brand="mercedes">Mercedes</div>
-                <div class="brand-btn" data-brand="audi">Audi</div>
-                <div class="brand-btn" data-brand="vw">Volkswagen</div>
-                <div class="brand-btn" data-brand="porsche">Porsche</div>
-                <div class="brand-btn" data-brand="volvo">Volvo</div>
-                <div class="brand-btn" data-brand="landrover">Land Rover</div>
-            </div>
-            
-            <div class="search-box">
-                <input type="text" class="search-input" id="partNumberInput" 
-                       placeholder="输入零件编号 (如: 11-00-7-566-034, A166-885-01-50, 06E-115-562-B)">
-                <button class="search-btn" onclick="searchPart()">🔍 智能搜索</button>
-            </div>
-            
-            <div class="quick-examples">
-                <div class="example-chip" onclick="quickSearch('11-00-7-566-034')">BMW 机油滤清器</div>
-                <div class="example-chip" onclick="quickSearch('A166-885-01-50')">奔驰空气滤芯</div>
-                <div class="example-chip" onclick="quickSearch('06E-115-562-B')">奥迪燃油滤芯</div>
-                <div class="example-chip" onclick="quickSearch('958-355-559-00')">保时捷刹车片</div>
-                <div class="example-chip" onclick="quickSearch('307-906-08-01')">沃尔沃雨刷片</div>
-                <div class="example-chip" onclick="quickSearch('LR-071-234')">路虎滤清器</div>
-            </div>
-        </div>
-        
-        <div class="loading" id="loading">
-            <div class="spinner"></div>
-            <p>正在搜索欧洲官方数据库...</p>
-        </div>
-        
-        <div class="results-section" id="resultsSection">
-            <!-- 搜索结果将在这里显示 -->
-        </div>
+  <div class="container">
+    <h1>汽车配件智能搜索</h1>
+    
+    <input type="text" id="search" placeholder="输入 OEM 号、配件名称、品牌或车型（如 11-00-7-566-034 或 BMW X5）..." autocomplete="off">
+    
+    <div id="brand-filter">
+      <button data-brand="all" class="active">全部</button>
+      <button data-brand="BMW">BMW</button>
+      <button data-brand="Mercedes">Mercedes</button>
+      <button data-brand="Audi">Audi</button>
+      <button data-brand="Volkswagen">VW</button>
+      <button data-brand="Porsche">Porsche</button>
+      <button data-brand="Volvo">Volvo</button>
+      <button data-brand="Land Rover">Land Rover</button>
     </div>
+    
+    <div id="results"></div>
+  </div>
 
-    <script>
-        // 欧洲品牌配件数据库
-        const europeanPartsDB = {
-            '11-00-7-566-034': {
-                partNumber: '11-00-7-566-034',
-                name: '发动机机油滤清器',
-                brand: 'BMW',
-                category: 'engine',
-                oemNumber: '11427525334',
-                specifications: {
-                    '外径': '76mm',
-                    '高度': '95mm',
-                    '螺纹规格': 'M22x1.5',
-                    '过滤精度': '99.5%',
-                    '适用温度': '-40°C ~ +150°C'
-                },
-                compatibility: ['BMW 3系 F30', 'BMW 5系 F10', 'BMW X3 F25', 'BMW X5 F15'],
-                images: [
-                    'https://via.placeholder.com/400x300/1c69d4/ffffff?text=BMW+机油滤清器',
-                    'https://via.placeholder.com/400x300/0066cc/ffffff?text=侧面视图',
-                    'https://via.placeholder.com/400x300/003d99/ffffff?text=包装图',
-                    'https://via.placeholder.com/400x300/002966/ffffff?text=安装图'
-                ],
-                suppliers: [
-                    { name: 'BMW原厂', price: 168, stock: '现货', delivery: '1天' },
-                    { name: 'MANN(德国)', price: 95, stock: '现货', delivery: '1-2天' },
-                    { name: 'MAHLE(德国)', price: 88, stock: '现货', delivery: '2-3天' },
-                    { name: 'BOSCH', price: 92, stock: '现货', delivery: '1-3天' }
-                ]
-            },
-            'A166-885-01-50': {
-                partNumber: 'A166-885-01-50',
-                name: '空气滤芯',
-                brand: 'Mercedes',
-                category: 'engine',
-                oemNumber: 'A1668850150',
-                specifications: {
-                    '长度': '320mm',
-                    '宽度': '210mm',
-                    '高度': '45mm',
-                    '材质': '多层纤维',
-                    '过滤等级': 'F9级'
-                },
-                compatibility: ['奔驰GLC', '奔驰C级 W205', '奔驰E级 W213', '奔驰GLE'],
-                images: [
-                    'https://via.placeholder.com/400x300/00a0e1/ffffff?text=奔驰+空气滤芯',
-                    'https://via.placeholder.com/400x300/0085c8/ffffff?text=尺寸图',
-                    'https://via.placeholder.com/400x300/006ba6/ffffff?text=材质图',
-                    'https://via.placeholder.com/400x300/004d73/ffffff?text=安装图'
-                ],
-                suppliers: [
-                    { name: 'Mercedes原厂', price: 285, stock: '现货', delivery: '1天' },
-                    { name: 'MANN(德国)', price: 145, stock: '现货', delivery: '1-2天' },
-                    { name: 'MAH](streamdown:incomplete-link)
+  <script>
+    // 示例数据（你可以替换成更大的 JSON 或从文件 fetch）
+    const parts = [
+      { oem: "11-00-7-566-034", name: "机油滤清器", brand: "BMW", model: "X5 E70 / 5 Series", price: "¥280-450", supplier: "原厂 / Mann / Mahle", compatibility: "95%", spec: "螺纹 M20x1.5, 高度 134mm", note: "高流量设计" },
+      { oem: "A166-885-01-50", name: "空气滤清器", brand: "Mercedes", model: "GLE W166 / GLS X166", price: "¥320-580", supplier: "原厂 / Knecht", compatibility: "98%", spec: "尺寸 约 300x200mm" },
+      { oem: "06K-115-562", name: "机油滤芯", brand: "Audi/VW", model: "A4 B9 / Golf 7 / Tiguan", price: "¥160-280", supplier: "Mann / Bosch", compatibility: "92%" },
+      // 在这里添加更多真实数据...
+    ];
+
+    const searchInput = document.getElementById('search');
+    const resultsDiv = document.getElementById('results');
+    const brandButtons = document.querySelectorAll('#brand-filter button');
+
+    let currentBrand = 'all';
+
+    function renderResults() {
+      resultsDiv.innerHTML = '';
+      const query = searchInput.value.toLowerCase().trim();
+
+      const filtered = parts.filter(item => {
+        const matchesQuery = !query || 
+          item.oem.toLowerCase().includes(query) ||
+          item.name.toLowerCase().includes(query) ||
+          item.brand.toLowerCase().includes(query) ||
+          item.model.toLowerCase().includes(query);
+        
+        const matchesBrand = currentBrand === 'all' || item.brand === currentBrand;
+        
+        return matchesQuery && matchesBrand;
+      });
+
+      if (filtered.length === 0) {
+        resultsDiv.innerHTML = '<p style="text-align:center; color:#777;">未找到匹配配件，请尝试其他关键词或品牌。</p>';
+        return;
+      }
+
+      filtered.forEach(item => {
+        const card = document.createElement('div');
+        card.className = 'card';
+        card.innerHTML = `
+          <div class="oem">OEM: ${item.oem}</div>
+          <div><strong>配件：</strong> ${item.name}</div>
+          <div><strong>品牌/车型：</strong> ${item.brand} - ${item.model}</div>
+          <div><strong>价格范围：</strong> ${item.price}</div>
+          <div><strong>供应商：</strong> ${item.supplier}</div>
+          <div><strong>兼容性评分：</strong> ${item.compatibility}</div>
+          ${item.spec ? `<div><strong>规格：</strong> ${item.spec}</div>` : ''}
+        `;
+        resultsDiv.appendChild(card);
+      });
+    }
+
+    searchInput.addEventListener('input', renderResults);
+
+    brandButtons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        brandButtons.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        currentBrand = btn.dataset.brand;
+        renderResults();
+      });
+    });
+
+    // 初始渲染
+    renderResults();
+  </script>
+</body>
+</html>
