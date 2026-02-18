@@ -108,15 +108,7 @@ MIT License
 Questions or ideas? Open an Issue.
 text
 
-**操作建议**（防止出错）：
-1. 打开你的 GitHub 仓库 → 点右上角的 “Add file” → “Create new file”
-2. 文件名填：`README.md`
-3. 把上面全部内容粘贴进去
-4. 下面 Commit new file → 直接点绿色按钮 “Commit new file”
 
-这样就完成了，不会乱序。
-
-如果你后续想改成中文版、加真实 Demo 链接、换截图，都可以随时告诉我，我再给你调整好的版本。祝项目顺利上线！
 
 
 
