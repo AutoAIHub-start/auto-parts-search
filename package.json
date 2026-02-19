@@ -1,0 +1,16 @@
+{
+  "name": "autoparts-pro",
+  "version": "1.0.0",
+  "description": "Global Auto Parts Search Engine - 全球汽车配件搜索引擎",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2"
+  },
+  "keywords": ["auto parts", "OEM", "car parts", "搜索引擎"],
+  "author": "AutoParts Pro",
+  "license": "MIT"
+}
